@@ -12,6 +12,16 @@ namespace MyNotes
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<NotesDbContext>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173");
+                    policy.AllowAnyHeader();
+                    policy.AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
@@ -28,7 +38,7 @@ namespace MyNotes
 
             app.UseAuthorization();
 
-
+            app.UseCors();
             app.MapControllers();
 
             app.Run();
